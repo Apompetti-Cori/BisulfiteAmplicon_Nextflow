@@ -24,6 +24,7 @@ params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 //Include modules to main pipeline
 include { fastqc as pretrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'pretrim_fastqc')
 include { trim_galore } from './modules/trim_galore.nf'
+include { fastqc as posttrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'posttrim_fastqc')
 
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
@@ -33,9 +34,14 @@ Channel
 
 workflow {
 
-    //Perform fastqc on raw reads, trim the reads with trim_galore, and perform fastqc on trimmed reads
+    //Run fastqc on raw reads
     pretrim_fastqc(reads_ch)
+    //Run trim_galore on raw reads
     trim_galore(reads_ch)
 
+    //Run fastqc on trimmed reads, specifies trim_galore[0] because second input channel is not need for this process
+    posttrim_fastqc(trim_galore.out[0])
+    //Run bismark_align on trimmed reads
+    
 }
 
