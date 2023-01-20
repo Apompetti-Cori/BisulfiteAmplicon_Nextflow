@@ -1,0 +1,15 @@
+#ignore everything
+*
+!*/
+
+#track these
+!.gitignore
+!modules/
+!modules/*
+!nextflow.config
+!main.nf
+!README.md
+!Dockerfile
+!.dockerignore
+!multiqc_config.yaml
+
