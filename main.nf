@@ -20,11 +20,14 @@ nextflow.enable.dsl=2
 params.reads = "${workflow.projectDir}/fastq/*{_R,_}{1,2}*.{fastq,fq}.gz"
 params.singleEnd = false
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
+params.genome = false
+params.db = params.genomes ? params.genomes[ params.genome ].db ?:false : false
 
 //Include modules to main pipeline
 include { fastqc as pretrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'pretrim_fastqc')
 include { trim_galore } from './modules/trim_galore.nf'
 include { fastqc as posttrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'posttrim_fastqc')
+include { bismark_align } from './modules/bismark_align.nf' addParams(db: params.db)
 
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
@@ -42,6 +45,6 @@ workflow {
     //Run fastqc on trimmed reads, specifies trim_galore[0] because second input channel is not need for this process
     posttrim_fastqc(trim_galore.out[0])
     //Run bismark_align on trimmed reads
-    
+    bismark_align(trim_galore.out[0])
 }
 

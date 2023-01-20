@@ -34,7 +34,7 @@ process trim_galore {
     publishDir "${params.outdir}/trim_galore", mode: 'copy'
 
     input:
-    tuple val(file_id), file(reads)
+    tuple val(file_id), path(reads)
 
     output:
     tuple val(file_id), path("*.fq.gz")

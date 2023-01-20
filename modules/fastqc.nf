@@ -33,10 +33,10 @@ process fastqc {
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 
     input:
-    tuple val(file_id), file(reads)
+    tuple val(file_id), path(reads)
 
     output:
-    file("*.{html,zip}")
+    path("*.{html,zip}")
 
     script:
     """
