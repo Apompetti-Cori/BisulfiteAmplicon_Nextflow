@@ -28,6 +28,7 @@ include { fastqc as pretrim_fastqc } from './modules/fastqc.nf' addParams(pubdir
 include { trim_galore } from './modules/trim_galore.nf'
 include { fastqc as posttrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'posttrim_fastqc')
 include { bismark_align } from './modules/bismark_align.nf' addParams(db: params.db)
+include { bismark_extract } from './modules/bismark_extract.nf'
 
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
@@ -46,5 +47,8 @@ workflow {
     posttrim_fastqc(trim_galore.out[0])
     //Run bismark_align on trimmed reads
     bismark_align(trim_galore.out[0])
+
+    //Run bismark_extract on bismark_align output
+    bismark_extract(bismark_align.out)
 }
 
