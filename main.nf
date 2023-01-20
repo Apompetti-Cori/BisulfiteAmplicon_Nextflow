@@ -21,10 +21,21 @@ params.reads = "${workflow.projectDir}/fastq/*{_R,_}{1,2}*.{fastq,fq}.gz"
 params.singleEnd = false
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 
+//Include modules to main pipeline
+include { fastqc as pretrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'pretrim_fastqc')
+include { trim_galore } from './modules/trim_galore.nf'
+
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
 .fromFilePairs(params.reads, size: params.singleEnd ? 1 : 2)
 .ifEmpty {exit 1, "Cannot find any reads matching ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line."}
 .set{ reads_ch }
 
-reads_ch.view()
+workflow {
+
+    //Perform fastqc on raw reads, trim the reads with trim_galore, and perform fastqc on trimmed reads
+    pretrim_fastqc(reads_ch)
+    trim_galore(reads_ch)
+
+}
+
