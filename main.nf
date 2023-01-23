@@ -29,6 +29,8 @@ include { trim_galore } from './modules/trim_galore.nf'
 include { fastqc as posttrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'posttrim_fastqc')
 include { bismark_align } from './modules/bismark_align.nf' addParams(db: params.db)
 include { bismark_extract } from './modules/bismark_extract.nf'
+include { bs_efficiency } from './modules/bs_efficiency.nf'
+include { allele_freq } from './modules/allele_freq.nf'
 
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
@@ -50,5 +52,11 @@ workflow {
 
     //Run bismark_extract on bismark_align output
     bismark_extract(bismark_align.out)
+
+    //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
+    bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
+    
+    //Run allele_freq on bismark_extract cpg (ot,ob) output
+    bismark_extract.out.cpg_ot.combine(bismark_extract.out.cpg_ob, by: 0).concat()
 }
 

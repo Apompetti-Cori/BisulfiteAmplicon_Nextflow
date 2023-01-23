@@ -12,4 +12,7 @@
 !Dockerfile
 !.dockerignore
 !multiqc_config.yaml
+!work/
+!work/*
+!3_cpg_whitelist.tsv
 
