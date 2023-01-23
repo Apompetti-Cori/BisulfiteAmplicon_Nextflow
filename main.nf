@@ -22,6 +22,7 @@ params.singleEnd = false
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.genome = false
 params.db = params.genomes ? params.genomes[ params.genome ].db ?:false : false
+params.cpg_wl = "./3_cpg_whitelist.tsv"
 
 //Include modules to main pipeline
 include { fastqc as pretrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'pretrim_fastqc')
@@ -57,6 +58,6 @@ workflow {
     bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
     
     //Run allele_freq on bismark_extract cpg (ot,ob) output
-    bismark_extract.out.cpg_ot.combine(bismark_extract.out.cpg_ob, by: 0).concat()
+    allele_freq(bismark_extract.out.cpg_ot.combine(bismark_extract.out.cpg_ob, by: 0))
 }
 

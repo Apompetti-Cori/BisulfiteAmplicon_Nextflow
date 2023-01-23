@@ -20,8 +20,7 @@ nextflow.enable.dsl=2
 Define local params 
 */
 params.outdir = "./results"
-params.pubdir = "allele_freq"
-params.cpg_wl = "./3_cpg_whitelist.tsv"
+params.pubdir = "allele_freq
 
 process allele_freq {
     maxForks 3
@@ -57,7 +56,7 @@ process allele_freq {
     select(-strand) %>%
     distinct() -> cpg_ob
 
-    vroom("!{cpg_wl}") -> cpg_whitelist
+    vroom("!{params.cpg_wl}") -> cpg_whitelist
 
     ### Count the number of methylated CpGs per read
     rbind(cpg_ot, cpg_ob) %>%
