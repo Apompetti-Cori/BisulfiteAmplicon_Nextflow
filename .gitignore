@@ -12,7 +12,5 @@
 !Dockerfile
 !.dockerignore
 !multiqc_config.yaml
-!work/
-!work/*
-!3_cpg_whitelist.tsv
-
+!./3_cpg_whitelist.tsv
+!./2021-07_new_target_cb_ref.tsv

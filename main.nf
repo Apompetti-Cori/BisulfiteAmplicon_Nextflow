@@ -22,7 +22,8 @@ params.singleEnd = false
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.genome = false
 params.db = params.genomes ? params.genomes[ params.genome ].db ?:false : false
-params.cpg_wl = "./3_cpg_whitelist.tsv"
+params.cpg_wl = "${workflow.projectDir}/3_cpg_whitelist.tsv"
+params.ref_dist = "${workflow.projectDir}/2021-07_new_target_cb_ref.tsv"
 
 //Include modules to main pipeline
 include { fastqc as pretrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'pretrim_fastqc')
@@ -32,6 +33,7 @@ include { bismark_align } from './modules/bismark_align.nf' addParams(db: params
 include { bismark_extract } from './modules/bismark_extract.nf'
 include { bs_efficiency } from './modules/bs_efficiency.nf'
 include { allele_freq } from './modules/allele_freq.nf'
+include { calc_summary } from './modules/calc_summary.nf'
 
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
@@ -56,8 +58,11 @@ workflow {
 
     //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
     bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
-    
     //Run allele_freq on bismark_extract cpg (ot,ob) output
-    allele_freq(bismark_extract.out.cpg_ot.combine(bismark_extract.out.cpg_ob, by: 0))
+    allele_freq(bismark_extract.out.cpg_ot.combine(bismark_extract.out.cpg_ob, by: 0).combine(Channel.fromPath( "${params.cpg_wl}" )))
+
+    //Run calc_summary on allele_freq and bs_efficiency output
+    calc_summary(bs_efficiency.out.combine(allele_freq.out, by: 0).combine(Channel.fromPath( "${params.ref_dist}" )))
+    
 }
 
