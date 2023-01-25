@@ -22,8 +22,8 @@ params.singleEnd = false
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.genome = false
 params.db = params.genomes ? params.genomes[ params.genome ].db ?:false : false
-params.cpg_wl = "${workflow.projectDir}/3_cpg_whitelist.tsv"
-params.ref_dist = "${workflow.projectDir}/2021-07_new_target_cb_ref.tsv"
+params.cpg_wl = "${workflow.projectDir}/tables/3_cpg_whitelist.tsv"
+params.ref_dist = "${workflow.projectDir}/tables/2021-07_new_target_cb_ref.tsv"
 
 //Include modules to main pipeline
 include { fastqc as pretrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'pretrim_fastqc')
