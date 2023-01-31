@@ -20,6 +20,7 @@ nextflow.enable.dsl=2
 params.fastq_folder = "${workflow.projectDir}/fastq"
 params.reads = "${params.fastq_folder}/*{_R,_}{1,2}*.{fastq,fq}.gz"
 params.singleEnd = false
+params.amplifytargets = false
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.genome = false
 params.db = params.genomes ? params.genomes[ params.genome ].db ?:false : false
@@ -61,12 +62,14 @@ workflow {
     //Run bismark_extract on bismark_align output
     bismark_extract(bismark_align.out)
 
-    //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
-    bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
-    //Run allele_freq on bismark_extract cpg (ot,ob) output
-    allele_freq(bismark_extract.out.cpg_ot.combine(bismark_extract.out.cpg_ob, by: 0).combine(Channel.fromPath( "${params.cpg_wl}" )))
+    if( params.amplifytargets ){
+        //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
+        bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
+        //Run allele_freq on bismark_extract cpg (ot,ob) output
+        allele_freq(bismark_extract.out.cpg_ot.combine(bismark_extract.out.cpg_ob, by: 0).combine(Channel.fromPath( "${params.cpg_wl}" )))
 
-    //Run calc_summary on allele_freq and bs_efficiency output
-    calc_summary(bs_efficiency.out.combine(allele_freq.out, by: 0).combine(Channel.fromPath( "${params.ref_dist}" )))
+        //Run calc_summary on allele_freq and bs_efficiency output
+        calc_summary(bs_efficiency.out.combine(allele_freq.out, by: 0).combine(Channel.fromPath( "${params.ref_dist}" )))
+    }
 }
 
