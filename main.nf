@@ -55,6 +55,7 @@ workflow {
     //Run bismark_align on trimmed reads
     bismark_align(trim_galore.out[0])
 
+    //Run multiqc on pretrim fastqc, trim_galore trimming report, posttrim fastqc output
     multiqc("${params.multiqc_config}", pretrim_fastqc.out.collect().combine(posttrim_fastqc.out.collect()).combine(trim_galore.out.trimming_report.collect()))
 
     //Run bismark_extract on bismark_align output
