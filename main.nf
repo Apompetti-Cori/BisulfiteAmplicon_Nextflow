@@ -35,6 +35,7 @@ include { bismark_extract } from './modules/bismark_extract.nf'
 include { bs_efficiency } from './modules/bs_efficiency.nf'
 include { allele_freq } from './modules/allele_freq.nf'
 include { calc_summary } from './modules/calc_summary.nf'
+include { multiqc } from './modules/multiqc.nf'
 
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
@@ -54,6 +55,8 @@ workflow {
     //Run bismark_align on trimmed reads
     bismark_align(trim_galore.out[0])
 
+    multiqc("${params.multiqc_config}", pretrim_fastqc.out.collect().combine(posttrim_fastqc.out.collect()).combine(trim_galore.out.trimming_report.collect()))
+
     //Run bismark_extract on bismark_align output
     bismark_extract(bismark_align.out)
 
@@ -64,6 +67,5 @@ workflow {
 
     //Run calc_summary on allele_freq and bs_efficiency output
     calc_summary(bs_efficiency.out.combine(allele_freq.out, by: 0).combine(Channel.fromPath( "${params.ref_dist}" )))
-    
 }
 
