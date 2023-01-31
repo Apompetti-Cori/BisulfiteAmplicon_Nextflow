@@ -33,7 +33,7 @@ process bismark_extract {
     tuple val(file_id), path(reads)
 
     output:
-    tuple val(file_id), path("${file_id}_1_val_1_bismark_bt2_pe.bismark.cov.gz")
+    tuple val(file_id), path("*.bismark.cov.gz"), optional: true
     tuple val(file_id), path("CpG_OT_${file_id}*"), emit: cpg_ot, optional: true
     tuple val(file_id), path("CpG_OB_${file_id}*"), emit: cpg_ob, optional: true
     tuple val(file_id), path("CHG_OT_${file_id}*"), emit: chg_ot, optional: true

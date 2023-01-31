@@ -17,7 +17,8 @@ Enable Nextflow DSL2
 nextflow.enable.dsl=2
 
 //Configurable variables for pipeline
-params.reads = "${workflow.projectDir}/fastq/*{_R,_}{1,2}*.{fastq,fq}.gz"
+params.fastq_folder = "${workflow.projectDir}/fastq"
+params.reads = "${params.fastq_folder}/*{_R,_}{1,2}*.{fastq,fq}.gz"
 params.singleEnd = false
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.genome = false
