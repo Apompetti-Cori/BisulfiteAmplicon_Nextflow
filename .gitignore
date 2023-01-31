@@ -1,16 +1,13 @@
-#ignore everything
-*
-!*/
-
-#track these
-!.gitignore
-!modules/
-!modules/*
-!nextflow.config
-!main.nf
-!README.md
-!Dockerfile
-!.dockerignore
-!multiqc_config.yaml
-!tables/3_cpg_whitelist.tsv
-!tables/2021-07_new_target_cb_ref.tsv
+#ignore these
+fastq/
+work/
+work/*
+.DS_Store
+._.DS_Store
+nextflow/
+nextflow.sh
+.nextflow.log
+.nextflow/
+results/
+._multiqc_config.yaml
+._*
