@@ -6,7 +6,7 @@ work/*
 ._.DS_Store
 nextflow/
 nextflow.sh
-.nextflow.log
+*nextflow.log*
 .nextflow/
 results/
 ._multiqc_config.yaml

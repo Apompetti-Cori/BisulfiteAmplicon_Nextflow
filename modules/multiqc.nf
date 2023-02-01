@@ -6,6 +6,9 @@ Bisulfite Amplicon Pipeline. Started January 2023.
 
 Contributors:
 Anthony Pompetti <apompetti@coriell.org>
+
+Methodology adapted from:
+prior snakemake pipeline developed by Matthew Walt
 */
 
 /*
