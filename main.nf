@@ -20,6 +20,7 @@ nextflow.enable.dsl=2
 params.fastq_folder = "${workflow.projectDir}/fastq"
 params.reads = "${params.fastq_folder}/*{_R,_}{1,2}*.{fastq,fq}.gz"
 params.singleEnd = false
+params.rrbs = false
 params.amplifytargets = false
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.genome = false

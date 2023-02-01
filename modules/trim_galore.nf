@@ -41,24 +41,16 @@ process trim_galore {
     path("*trimming_report.txt"), emit: trimming_report
 
     script:
-    if ( params.singleEnd )
-    """
-    trim_galore \
-    --length 35 \
-    --quality 28 \
-    --phred33 \
-    --cores ${task.cpus} \
-    $reads
-    """
+    def singleEnd = params.singleEnd ? '' : '--paired'
+    def rrbs = params.rrbs ? '--rrbs' : ''
 
-    else
     """
     trim_galore \
+    ${singleEnd} \
+    ${rrbs} \
     --length 35 \
     --quality 28 \
-    --paired \
     --phred33 \
-    --clip_R2 3 \
     --cores ${task.cpus} \
     $reads
     """
