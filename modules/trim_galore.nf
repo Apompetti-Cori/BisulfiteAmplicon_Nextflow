@@ -21,7 +21,6 @@ Define local params
 */
 params.outdir = "./results"
 params.pubdir = "trim_galore"
-params.singleEnd = false
 
 /*
 Run trim_galore on each read stored within the reads_ch channel

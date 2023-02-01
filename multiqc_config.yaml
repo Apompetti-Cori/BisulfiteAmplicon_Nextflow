@@ -1,3 +1,4 @@
+custom_logo_url: "https://www.coriell.org/Content/Coriell_Logo_NewV3MDB1.webp"
 module_order:
     - fastqc:
         name: 'FastQC (raw)'

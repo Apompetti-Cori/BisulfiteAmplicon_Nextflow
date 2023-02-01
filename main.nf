@@ -22,7 +22,6 @@ params.reads = "${params.fastq_folder}/*{_R,_}{1,2}*.{fastq,fq}.gz"
 params.singleEnd = false
 params.rrbs = false
 params.amplifytargets = false
-params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.genome = false
 params.db = params.genomes ? params.genomes[ params.genome ].db ?:false : false
 params.cpg_wl = "${workflow.projectDir}/tables/3_cpg_whitelist.tsv"
@@ -34,6 +33,7 @@ include { trim_galore } from './modules/trim_galore.nf'
 include { fastqc as posttrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'posttrim_fastqc')
 include { bismark_align } from './modules/bismark_align.nf' addParams(db: params.db)
 include { bismark_extract } from './modules/bismark_extract.nf'
+include { bisulfite_conversion } from './modules/bisulfite_conversion.nf'
 include { bs_efficiency } from './modules/bs_efficiency.nf'
 include { allele_freq } from './modules/allele_freq.nf'
 include { calc_summary } from './modules/calc_summary.nf'
@@ -46,7 +46,7 @@ Channel
 .set{ reads_ch }
 
 workflow {
-
+    
     //Run fastqc on raw reads
     pretrim_fastqc(reads_ch)
     //Run trim_galore on raw reads
@@ -58,14 +58,18 @@ workflow {
     bismark_align(trim_galore.out[0])
 
     //Run multiqc on pretrim fastqc, trim_galore trimming report, posttrim fastqc output
-    multiqc("${params.multiqc_config}", pretrim_fastqc.out.collect().combine(posttrim_fastqc.out.collect()).combine(trim_galore.out.trimming_report.collect()))
+    multiqc(pretrim_fastqc.out.collect().combine(posttrim_fastqc.out.collect()).combine(trim_galore.out.trimming_report.collect()))
 
     //Run bismark_extract on bismark_align output
     bismark_extract(bismark_align.out)
 
+    //Run bisulfite_conversion on bismark_align output
+    bisulfite_conversion(bismark_align.out)
+
+    //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
+    bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
+
     if( params.amplifytargets ){
-        //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
-        bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
         //Run allele_freq on bismark_extract cpg (ot,ob) output
         allele_freq(bismark_extract.out.cpg_ot.combine(bismark_extract.out.cpg_ob, by: 0).combine(Channel.fromPath( "${params.cpg_wl}" )))
 

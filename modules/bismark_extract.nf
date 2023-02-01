@@ -30,7 +30,7 @@ process bismark_extract {
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 
     input:
-    tuple val(file_id), path(reads)
+    tuple val(file_id), path(bam)
 
     output:
     tuple val(file_id), path("*.bismark.cov.gz"), optional: true
@@ -43,6 +43,6 @@ process bismark_extract {
 
     script:
     """
-    bismark_methylation_extractor --multicore ${task.cpus} --paired-end --include_overlap --bedGraph ${reads}
+    bismark_methylation_extractor --multicore ${task.cpus} --paired-end --include_overlap --bedGraph ${bam}
     """
 }

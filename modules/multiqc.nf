@@ -21,6 +21,7 @@ Define local params
 */
 params.outdir = "./results"
 params.pubdir = "multiqc"
+params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.multiqc_fn = "multiqc_report"
 
 process multiqc {
@@ -32,7 +33,6 @@ process multiqc {
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
     
     input:
-    path(multiqc_config)
     path('multiqc_input/*')
 
     output:
@@ -40,6 +40,6 @@ process multiqc {
 
     script:
     """
-    multiqc multiqc_input/ --config ${multiqc_config} --filename ${params.multiqc_fn}
+    multiqc multiqc_input/ --config ${params.multiqc_config} --filename ${params.multiqc_fn}
     """
 }
