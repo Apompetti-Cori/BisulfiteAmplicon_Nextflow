@@ -133,7 +133,7 @@ process bisulfite_conversion {
             "z_lambda", "Z_lambda", "x_lambda", "X_lambda", "H_lambda", "h_lambda", "H_lambda", "u_lambda", "U_lambda"]
     
     header = "\t".join(cols) + "\n"
-    data = [str("!{file_id}"), meth, unmeth, perc_meth,
+    data = [str(sample_id), meth, unmeth, perc_meth,
             cg_meth, cg_unmeth, perc_cg_meth,
             nonCg_meth, nonCg_unmeth, perc_nonCg_meth,
             lambda_meth, lambda_unmeth, perc_lambda_meth,
