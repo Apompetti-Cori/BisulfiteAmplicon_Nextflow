@@ -37,21 +37,32 @@ process bisulfite_conversion {
     tuple val(file_id), path("*.tsv"), optional: true
 
     shell:
-    '''
+    $/
     #!/usr/bin/env python
+
     from pathlib import Path
     from collections import Counter
+    import pysam
+
+    if Path("!{bam}").suffix == ".bam":
+        bamfile = pysam.AlignmentFile(str("!{bam}"), "rb")
+    elif Path("!{bam}").suffix == ".sam":
+        bamfile = pysam.AlignmentFile(str("!{bam}"), "r")
+    else:
+        raise ValueError("Alignment file must end in .sam or .bam")
+    
+    outfile = str("!{file_id}") + str(".conversion-stats.tsv")
 
     counts = {"z":0, "Z":0, "x":0, "X":0, "H":0, "h":0, "H":0, "u":0, "U":0}
     lambda_counts =  {"z":0, "Z":0, "x":0, "X":0, "H":0, "h":0, "H":0, "u":0, "U":0}
 
-    for read in !{bam}:
+    for read in bamfile:
         ref = read.reference_name
         aln_str = read.get_tag("XM")
         if not read.is_unmapped:
-            if (read.is_paired and read.is_proper_pair):  # Mapped paired_end reads
+            if (read.is_paired and read.is_proper_pair):
                 c = Counter(aln_str)
-                if ref == !{params.lambda_rname}:
+                if ref == "!{params.lambda_rname}":
                     lambda_counts["z"] += c.get("z", 0)
                     lambda_counts["Z"] += c.get("Z", 0)
                     lambda_counts["x"] += c.get("x", 0)
@@ -68,7 +79,7 @@ process bisulfite_conversion {
                 counts["H"] += c.get("H", 0)
                 counts["u"] += c.get("u", 0)
                 counts["U"] += c.get("U", 0)
-            else:  # Mapped single end reads
+            else: #Mapped single end reads
                 c = Counter(aln_str)
                 if ref == lambda_rname:
                     lambda_counts["z"] += c.get("z", 0)
@@ -87,7 +98,7 @@ process bisulfite_conversion {
                 counts["H"] += c.get("H", 0)
                 counts["u"] += c.get("u", 0)
                 counts["U"] += c.get("U", 0)
-    !{bam}.close()
+    bamfile.close()
 
     # Tabulate counts and calculate percentages
     unmeth = counts["z"] + counts["x"] + counts["h"] + counts["u"]
@@ -108,7 +119,7 @@ process bisulfite_conversion {
     lambda_nonCg_meth = lambda_counts["X"] + lambda_counts["H"] + lambda_counts["U"]
     lambda_nonCg_unmeth = lambda_counts["x"] + lambda_counts["h"] + lambda_counts["u"]
     perc_lambda_nonCg_meth = round(lambda_nonCg_meth / (lambda_nonCg_meth + lambda_nonCg_unmeth) * 100, 3)
-
+    
     # Create tidy output
     cols = ["Sample_Name", "Methylated_All", "Unmethylated_All", "Percent_Methylated_All", 
             "Methylated_CpG", "Unmethylated_CpG", "Percent_Methylated_CpG", 
@@ -118,8 +129,9 @@ process bisulfite_conversion {
             "Lambda_Methylated_nonCpG", "Lambda_Unmethylated_nonCpG", "Lambda_Percent_Methylated_nonCpG",
             "z", "Z", "x", "X", "H", "h", "H", "u", "U", 
             "z_lambda", "Z_lambda", "x_lambda", "X_lambda", "H_lambda", "h_lambda", "H_lambda", "u_lambda", "U_lambda"]
+    
     header = "\t".join(cols) + "\n"
-    data = [!{file_id}, meth, unmeth, perc_meth,
+    data = [Path("!{bam}").stem, meth, unmeth, perc_meth,
             cg_meth, cg_unmeth, perc_cg_meth,
             nonCg_meth, nonCg_unmeth, perc_nonCg_meth,
             lambda_meth, lambda_unmeth, perc_lambda_meth,
@@ -129,8 +141,8 @@ process bisulfite_conversion {
             lambda_counts["z"], lambda_counts["Z"], lambda_counts["x"], lambda_counts["X"], lambda_counts["H"], lambda_counts["h"], lambda_counts["H"], lambda_counts["u"], lambda_counts["U"]]
     data = "\t".join([str(x) for x in data]) + "\n"
 
-    with open(str(!{file_id}.conversion-stats.tsv), "w") as out:
+    with open(str(outfile), "w") as out:
         out.write(header)
         out.write(data)
-    '''
+    /$
 }

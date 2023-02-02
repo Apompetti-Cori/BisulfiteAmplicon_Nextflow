@@ -48,26 +48,26 @@ Channel
 workflow {
     
     //Run fastqc on raw reads
-    pretrim_fastqc(reads_ch)
+    //pretrim_fastqc(reads_ch)
     //Run trim_galore on raw reads
     trim_galore(reads_ch)
 
     //Run fastqc on trimmed reads, specifies trim_galore[0] because second input channel is not need for this process
-    posttrim_fastqc(trim_galore.out[0])
+    //posttrim_fastqc(trim_galore.out[0])
     //Run bismark_align on trimmed reads
     bismark_align(trim_galore.out[0])
 
     //Run multiqc on pretrim fastqc, trim_galore trimming report, posttrim fastqc output
-    multiqc(pretrim_fastqc.out.collect().combine(posttrim_fastqc.out.collect()).combine(trim_galore.out.trimming_report.collect()))
+    //multiqc(pretrim_fastqc.out.collect().combine(posttrim_fastqc.out.collect()).combine(trim_galore.out.trimming_report.collect()))
 
     //Run bismark_extract on bismark_align output
     bismark_extract(bismark_align.out)
 
     //Run bisulfite_conversion on bismark_align output
-    bisulfite_conversion(bismark_align.out)
+    //bisulfite_conversion(bismark_align.out)
 
     //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
-    bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
+    //bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
 
     if( params.amplifytargets ){
         //Run allele_freq on bismark_extract cpg (ot,ob) output
