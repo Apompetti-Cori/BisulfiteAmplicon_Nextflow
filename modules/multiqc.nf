@@ -23,6 +23,7 @@ params.outdir = "./results"
 params.pubdir = "multiqc"
 params.multiqc_config = "${workflow.projectDir}/multiqc_config.yaml"
 params.multiqc_fn = "multiqc_report"
+params.multiqc_report_title = "MultiQC Report"
 
 process multiqc {
     memory '32 GB'
@@ -40,6 +41,6 @@ process multiqc {
 
     script:
     """
-    multiqc multiqc_input/ --config ${params.multiqc_config} --filename ${params.multiqc_fn}
+    multiqc multiqc_input/ --config ${params.multiqc_config} --filename ${params.multiqc_fn} --title ${params.multiqc_report_title}
     """
 }
