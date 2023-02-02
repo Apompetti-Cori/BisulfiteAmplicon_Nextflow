@@ -19,6 +19,7 @@ module_order:
             - '*_val_1_fastqc.zip'
             - '*_val_2_fastqc.zip'
             - '*_trimmed_fastqc.zip'
+    - bismark
     - sortmerna
     - fastqc:
         name: 'FastQC (sortMeRNA)'
