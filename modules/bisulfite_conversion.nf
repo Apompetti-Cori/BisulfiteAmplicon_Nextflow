@@ -50,8 +50,10 @@ process bisulfite_conversion {
         bamfile = pysam.AlignmentFile(str("!{bam}"), "r")
     else:
         raise ValueError("Alignment file must end in .sam or .bam")
+
+    sample_id = re.sub('_val.*', '', str("!{file_id}"))
     
-    outfile = str("!{file_id}") + str(".conversion-stats.tsv")
+    outfile = str(sample_id) + str(".conversion-stats.tsv")
 
     counts = {"z":0, "Z":0, "x":0, "X":0, "H":0, "h":0, "H":0, "u":0, "U":0}
     lambda_counts =  {"z":0, "Z":0, "x":0, "X":0, "H":0, "h":0, "H":0, "u":0, "U":0}
@@ -131,7 +133,7 @@ process bisulfite_conversion {
             "z_lambda", "Z_lambda", "x_lambda", "X_lambda", "H_lambda", "h_lambda", "H_lambda", "u_lambda", "U_lambda"]
     
     header = "\t".join(cols) + "\n"
-    data = [Path("!{bam}").stem, meth, unmeth, perc_meth,
+    data = [str("!{file_id}"), meth, unmeth, perc_meth,
             cg_meth, cg_unmeth, perc_cg_meth,
             nonCg_meth, nonCg_unmeth, perc_nonCg_meth,
             lambda_meth, lambda_unmeth, perc_lambda_meth,
