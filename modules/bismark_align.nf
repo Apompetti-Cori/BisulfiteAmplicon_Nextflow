@@ -35,6 +35,7 @@ process bismark_align {
 
     output:
     tuple val(file_id), path("*.bam")
+    path("*report.txt"), emit: align_report
 
     script:
     """
