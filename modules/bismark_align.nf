@@ -24,7 +24,7 @@ params.pubdir = "bismark_align"
 params.db = false
 
 process bismark_align {
-    maxForks 3
+    maxForks 10
     memory '8 GB'
     cpus 4
     

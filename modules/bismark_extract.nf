@@ -23,7 +23,7 @@ params.outdir = "./results"
 params.pubdir = "bismark_extract"
 
 process bismark_extract {
-    maxForks 3
+    maxForks 10
     memory '8 GB'
     cpus 4
 
