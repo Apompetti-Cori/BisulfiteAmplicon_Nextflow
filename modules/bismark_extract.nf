@@ -24,7 +24,7 @@ params.pubdir = "bismark_extract"
 
 process bismark_extract {
     maxForks 10
-    memory '8 GB'
+    memory '32 GB'
     cpus 4
 
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
