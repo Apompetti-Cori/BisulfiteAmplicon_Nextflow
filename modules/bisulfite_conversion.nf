@@ -43,6 +43,7 @@ process bisulfite_conversion {
     from pathlib import Path
     from collections import Counter
     import pysam
+    import re
 
     if Path("!{bam}").suffix == ".bam":
         bamfile = pysam.AlignmentFile(str("!{bam}"), "rb")
