@@ -36,7 +36,7 @@ process multiqc {
     path('multiqc_input/*')
 
     output:
-    path("${params.multiqc_fn}.html")
+    path("*.html")
 
     script:
     """

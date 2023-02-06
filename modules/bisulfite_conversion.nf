@@ -35,6 +35,7 @@ process bisulfite_conversion {
 
     output:
     tuple val(file_id), path("*.tsv"), optional: true
+    path("*.tsv"), emit: conversion_report, optional: true
 
     shell:
     $/
