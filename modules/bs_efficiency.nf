@@ -23,7 +23,7 @@ params.outdir = "./results"
 params.pubdir = "bs_efficiency"
 
 process bs_efficiency {
-    maxForks 3
+    maxForks 5
     memory '8 GB'
     cpus 4
 

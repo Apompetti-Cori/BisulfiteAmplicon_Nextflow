@@ -24,7 +24,7 @@ params.pubdir = "bs_conversion"
 params.lambda_rname = "J02459.1_lambda"
 
 process bisulfite_conversion {
-    maxForks 3
+    maxForks 5
     memory '8 GB'
     cpus 1
 
