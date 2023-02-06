@@ -20,7 +20,7 @@ nextflow.enable.dsl=2
 Define local params 
 */
 params.outdir = "./results"
-params.pubdir = "bismark_conversion"
+params.pubdir = "bs_conversion"
 params.lambda_rname = "J02459.1_lambda"
 
 process bisulfite_conversion {
