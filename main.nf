@@ -68,7 +68,7 @@ workflow {
     multiqc(pretrim_fastqc.out.collect().mix(
         posttrim_fastqc.out.collect(),
         trim_galore.out.trimming_report.collect(),
-        bismark_align.align_report.collect(),
+        bismark_align.out.align_report.collect(),
         bisulfite_conversion.out.conversion_report.collect()
     ))
     //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
