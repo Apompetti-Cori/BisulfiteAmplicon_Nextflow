@@ -26,7 +26,7 @@ params.multiqc_report_title = "MultiQC Report"
 
 process multiqc {
     memory '32 GB'
-    cpus 8
+    cpus 1
 
     conda '/opt/miniconda3/envs/multiqc'
 

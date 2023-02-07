@@ -23,9 +23,9 @@ params.outdir = "./results"
 params.pubdir = "bs_efficiency"
 
 process bs_efficiency {
-    maxForks 5
+    maxForks 4
     memory '8 GB'
-    cpus 4
+    cpus 1
 
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 

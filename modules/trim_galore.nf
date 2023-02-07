@@ -26,9 +26,9 @@ params.pubdir = "trim_galore"
 Run trim_galore on each read stored within the reads_ch channel
 */
 process trim_galore {
-    maxForks 10
+    maxForks 4
     memory '8 GB'
-    cpus 4
+    cpus 2
 
     publishDir "${params.outdir}/trim_galore", mode: 'copy'
 
