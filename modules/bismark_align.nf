@@ -24,14 +24,15 @@ params.pubdir = "bismark_align"
 params.db = false
 
 process bismark_align {
-    maxForks 1
+    maxForks 4
     memory '40 GB'
-    cpus 4
+    cpus 8
     
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 
     input:
     tuple val(file_id), path(reads)
+    val(state)
 
     output:
     tuple val(file_id), path("*.bam")

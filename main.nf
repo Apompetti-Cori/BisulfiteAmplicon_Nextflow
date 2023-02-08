@@ -55,7 +55,9 @@ workflow {
     //Run fastqc on trimmed reads, specifies trim_galore[0] because second input channel is not need for this process
     posttrim_fastqc(trim_galore.out[0])
     //Run bismark_align on trimmed reads
-    bismark_align(trim_galore.out[0].collect(flat: false).flatMap())
+    //Wait until postrim_fastqc is done to run bismark align
+    state = posttrim_fastqc.out.collect()
+    bismark_align(trim_galore.out[0].collect(flat: false).flatMap(), state)
 
     //Run bismark_extract on bismark_align output
     bismark_extract(bismark_align.out[0])

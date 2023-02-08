@@ -11,3 +11,5 @@ nextflow.sh
 results/
 ._multiqc_config.yaml
 ._*
+trace*
+report*

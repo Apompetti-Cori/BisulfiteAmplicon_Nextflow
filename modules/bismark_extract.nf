@@ -23,7 +23,7 @@ params.outdir = "./results"
 params.pubdir = "bismark_extract"
 
 process bismark_extract {
-    maxForks 1
+    maxForks 4
     memory '16 GB'
     cpus 4
 
@@ -43,6 +43,6 @@ process bismark_extract {
 
     script:
     """
-    bismark_methylation_extractor --multicore ${task.cpus} --paired-end --include_overlap --bedGraph ${bam}
+    bismark_methylation_extractor --parallel ${task.cpus} --paired-end --include_overlap --bedGraph ${bam}
     """
 }
