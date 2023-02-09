@@ -1,2 +1,2 @@
-# BisulfiteAmplicon_Nextflow
-Bisulfite Amplicon pipeline adapted from prior snakemake pipeline
+# Bisulfite Nextflow
+Bisulfite pipeline adapted from prior snakemake pipeline
