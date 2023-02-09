@@ -26,7 +26,7 @@ params.db = false
 process bismark_align {
     maxForks 4
     memory '40 GB'
-    cpus 8
+    cpus 4
     
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 
