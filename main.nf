@@ -28,16 +28,17 @@ params.cpg_wl = "${workflow.projectDir}/tables/3_cpg_whitelist.tsv"
 params.ref_dist = "${workflow.projectDir}/tables/2021-07_new_target_cb_ref.tsv"
 
 //Include modules to main pipeline
-include { fastqc as pretrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'pretrim_fastqc')
-include { trim_galore } from './modules/trim_galore.nf'
-include { fastqc as posttrim_fastqc } from './modules/fastqc.nf' addParams(pubdir: 'posttrim_fastqc')
-include { bismark_align } from './modules/bismark_align.nf' addParams(db: params.db)
-include { bismark_extract } from './modules/bismark_extract.nf'
-include { bisulfite_conversion } from './modules/bisulfite_conversion.nf'
+include { FASTQC as PRETRIM_FASTQC } from './modules/fastqc/main' addParams(pubdir: 'pretrim_fastqc')
+include { TRIM_GALORE } from './modules/trim_galore/main'
+include { FASTQC as POSTTRIM_FASTQC } from './modules/fastqc/main' addParams(pubdir: 'posttrim_fastqc')
+include { BISMARK_ALIGN } from './modules/bismark/bismark_align/main' addParams(db: params.db)
+include { BISMARK_EXTRACT } from './modules/bismark/bismark_extract/main'
+include { CONVERSION_STATS } from './modules/conversion_stats/main'
+include { MULTIQC } from './modules/multiqc/main'
 include { bs_efficiency } from './modules/bs_efficiency.nf'
 include { allele_freq } from './modules/allele_freq.nf'
 include { calc_summary } from './modules/calc_summary.nf'
-include { multiqc } from './modules/multiqc.nf'
+
 
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
@@ -48,25 +49,26 @@ Channel
 workflow {
     
     //Run fastqc on raw reads
-    pretrim_fastqc(reads_ch)
+    PRETRIM_FASTQC(reads_ch)
     //Run trim_galore on raw reads
-    trim_galore(reads_ch)
+    TRIM_GALORE(reads_ch)
 
     //Run fastqc on trimmed reads, specifies trim_galore[0] because second input channel is not need for this process
-    posttrim_fastqc(trim_galore.out[0])
+    TRIM_GALORE(TRIM_GALORE.out.reads)
     //Run bismark_align on trimmed reads
-    //Wait until postrim_fastqc is done to run bismark align
-    state = posttrim_fastqc.out.collect()
-    bismark_align(trim_galore.out[0].collect(flat: false).flatMap(), state)
+    //State Dependency: Wait until TRIM_GALORE is done to run bismark align
+    //State Dependency: Wait until POSTTRIM_FASTQC is done to run bismark align
+    state = POSTTRIM_FASTQC.out.collect()
+    BISMARK_ALIGN(TRIM_GALORE.out.reads.collect(flat: false).flatMap(), state)
 
     //Run bismark_extract on bismark_align output
-    bismark_extract(bismark_align.out[0].collect(flat: false).flatMap())
+    BISMARK_EXTRACT(BISMARK_ALIGN.bam.collect(flat: false).flatMap())
 
     //Run bisulfite_conversion on bismark_align output
-    bisulfite_conversion(bismark_align.out[0].collect(flat: false).flatMap())
+    CONVERSION_STATS(BISMARK_ALIGN.bam.collect(flat: false).flatMap())
 
     //Run multiqc on pretrim fastqc output, trim_galore trimming report, posttrim fastqc output, bismark conversion output
-    multiqc(pretrim_fastqc.out.collect().combine(posttrim_fastqc.out.collect()).combine(trim_galore.out.trimming_report.collect()).combine(bismark_align.out.align_report.collect()).combine(bisulfite_conversion.out.conversion_report.collect()))
+    MULTIQC(PRETRIM_FASTQC.out.collect().combine(POSTTRIM_FASTQC.out.collect()).combine(TRIM_GALORE.out.report.collect()).combine(BISMARK_ALIGN.out.report.collect()).combine(CONVERSION_STATS.out.report.collect()))
     
     //Run bs_efficiency on bismark_extract chg (ot,ob) and chh (ot,ob) output
     //bs_efficiency(bismark_extract.out.chg_ot.combine(bismark_extract.out.chg_ob, by: 0).combine(bismark_extract.out.chh_ot.combine(bismark_extract.out.chh_ob, by: 0), by: 0))
