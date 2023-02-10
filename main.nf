@@ -62,10 +62,10 @@ workflow {
     BISMARK_ALIGN(TRIM_GALORE.out.reads.collect(flat: false).flatMap(), state)
 
     //Run bismark_extract on bismark_align output
-    BISMARK_EXTRACT(BISMARK_ALIGN.bam.collect(flat: false).flatMap())
+    BISMARK_EXTRACT(BISMARK_ALIGN.out.bam.collect(flat: false).flatMap())
 
     //Run bisulfite_conversion on bismark_align output
-    CONVERSION_STATS(BISMARK_ALIGN.bam.collect(flat: false).flatMap())
+    CONVERSION_STATS(BISMARK_ALIGN.out.bam.collect(flat: false).flatMap())
 
     //Run multiqc on pretrim fastqc output, trim_galore trimming report, posttrim fastqc output, bismark conversion output
     MULTIQC(PRETRIM_FASTQC.out.collect().combine(POSTTRIM_FASTQC.out.collect()).combine(TRIM_GALORE.out.report.collect()).combine(BISMARK_ALIGN.out.report.collect()).combine(CONVERSION_STATS.out.report.collect()))
