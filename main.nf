@@ -54,7 +54,7 @@ workflow {
     TRIM_GALORE(reads_ch)
 
     //Run fastqc on trimmed reads, specifies trim_galore[0] because second input channel is not need for this process
-    TRIM_GALORE(TRIM_GALORE.out.reads)
+    POSTTRIM_FASTQC(TRIM_GALORE.out.reads)
     //Run bismark_align on trimmed reads
     //State Dependency: Wait until TRIM_GALORE is done to run bismark align
     //State Dependency: Wait until POSTTRIM_FASTQC is done to run bismark align
