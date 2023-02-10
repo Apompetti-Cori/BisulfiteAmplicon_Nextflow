@@ -1,5 +1,8 @@
 custom_logo: "./multiqc_logo/Coriell_Logo.png"
 custom_logo_url: "https://www.coriell.org/"
+exclude_modules:
+    - snippy
+    - snippy-core
 module_order:
     - fastqc:
         name: 'FastQC (raw)'
@@ -19,7 +22,6 @@ module_order:
             - '*_val_1_fastqc.zip'
             - '*_val_2_fastqc.zip'
             - '*_trimmed_fastqc.zip'
-    - bismark
     - sortmerna
     - fastqc:
         name: 'FastQC (sortMeRNA)'
@@ -32,3 +34,91 @@ module_order:
         contents: 'HISAT2 summary stats'
         shared: true
     - htseq
+    - custom_content
+
+custom_data:
+    conversion_files:
+        file_format: 'tsv'
+        description: ''
+        plot_type: 'table'
+        section_name: 'Conversion Stats'
+        headers:
+            Percent_Methylated_All:
+                suffix: '%'
+                format: '{:,.2f}'
+            Percent_Methylated_CpG:
+                suffix: '%'
+                format: '{:,.2f}'
+            Lambda_Percent_Methylated_All:
+                suffix: '%'
+                format: '{:,.2f}'
+            Lambda_Percent_Methylated_CpG:
+                suffix: '%'
+                format: '{:,.2f}'
+            Methylated_All:
+                hidden: True
+            Unmethylated_All:
+                hidden: True
+            Methylated_CpG:
+                hidden: True
+            Unmethylated_CpG:
+                hidden: True
+            Methylated_nonCpG:
+                hidden: True
+            Unmethylated_nonCpG:
+                hidden: True
+            Percent_Methylated_nonCpG:
+                hidden: True
+                suffix: '%'
+                format: '{:,.2f}'
+            Lambda_Methylated_All:
+                hidden: True
+            Lambda_Unmethylated_All:
+                hidden: True
+            Lambda_Methylated_CpG:
+                hidden: True
+            Lambda_Unmethylated_CpG:
+                hidden: True
+            Lambda_Methylated_nonCpG:
+                hidden: True
+            Lambda_Unmethylated_nonCpG:
+                hidden: True
+            Lambda_Percent_Methylated_nonCpG:
+                hidden: True
+                suffix: '%'
+                format: '{:,.2f}'
+            z:
+                hidden: True
+            Z:
+                hidden: True
+            x:
+                hidden: True
+            X:
+                hidden: True
+            H:
+                hidden: True
+            h:
+                hidden: True
+            u:
+                hidden: True
+            U:
+                hidden: True
+            z_lambda:
+                hidden: True
+            Z_lambda:
+                hidden: True
+            x_lambda:
+                hidden: True
+            X_lambda:
+                hidden: True
+            u_lambda:
+                hidden: True
+            U_lambda:
+                hidden: True
+            h_lambda:
+                hidden: True
+            H_lambda:
+                hidden: True
+sp:
+  conversion_files:
+    fn: "*.conversion-stats.tsv"
