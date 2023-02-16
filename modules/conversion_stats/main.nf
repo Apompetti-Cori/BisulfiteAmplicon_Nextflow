@@ -119,11 +119,17 @@ process CONVERSION_STATS {
     perc_lambda_meth = round(lambda_meth / (lambda_meth + lambda_unmeth) * 100, 3)
     lambda_cg_meth = lambda_counts["Z"]
     lambda_cg_unmeth = lambda_counts["z"]
-    perc_lambda_cg_meth = round(lambda_cg_meth / (lambda_cg_meth + lambda_cg_unmeth) * 100, 3)
+    try: 
+        perc_lambda_cg_meth = round(lambda_cg_meth / (lambda_cg_meth + lambda_cg_unmeth) * 100, 3)
+    except ZeroDivisionError: 
+        perc_lambda_cg_meth = 0
     lambda_nonCg_meth = lambda_counts["X"] + lambda_counts["H"] + lambda_counts["U"]
     lambda_nonCg_unmeth = lambda_counts["x"] + lambda_counts["h"] + lambda_counts["u"]
-    perc_lambda_nonCg_meth = round(lambda_nonCg_meth / (lambda_nonCg_meth + lambda_nonCg_unmeth) * 100, 3)
-    
+    try: 
+        perc_lambda_nonCg_meth = round(lambda_nonCg_meth / (lambda_nonCg_meth + lambda_nonCg_unmeth) * 100, 3)
+    except ZeroDivisionError: 
+        perc_lambda_nonCg_meth = 0
+
     # Create tidy output
     cols = ["Sample_Name", "Methylated_All", "Unmethylated_All", "Percent_Methylated_All", 
             "Methylated_CpG", "Unmethylated_CpG", "Percent_Methylated_CpG", 
