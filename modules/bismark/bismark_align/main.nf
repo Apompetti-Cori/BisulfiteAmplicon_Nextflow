@@ -40,6 +40,6 @@ process BISMARK_ALIGN {
 
     script:
     """
-    bismark --bowtie2 --parallel ${task.cpus} ${params.db} -1 ${reads[0]} -2 ${reads[1]} -B ${file_id}
+    bismark --bowtie2 --parallel ${task.cpus} ${params.db} -1 ${reads[0]} -2 ${reads[1]}
     """
 }
