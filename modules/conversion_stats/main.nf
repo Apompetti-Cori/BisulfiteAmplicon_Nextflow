@@ -107,16 +107,28 @@ process CONVERSION_STATS {
     # Tabulate counts and calculate percentages
     unmeth = counts["z"] + counts["x"] + counts["h"] + counts["u"]
     meth = counts["Z"] + counts["X"] + counts["H"] + counts["U"]
-    perc_meth = round(meth / (meth + unmeth) * 100, 3)
+    try:
+        perc_meth = round(meth / (meth + unmeth) * 100, 3)
+    except ZeroDivisionError:
+        perc_meth = 0
     cg_meth = counts["Z"]
     cg_unmeth = counts["z"]
-    perc_cg_meth = round(cg_meth / (cg_meth + cg_unmeth) * 100, 3)
+    try:
+        perc_cg_meth = round(cg_meth / (cg_meth + cg_unmeth) * 100, 3)
+    except ZeroDivisionError:
+        perc_cg_meth = 0
     nonCg_meth = counts["X"] + counts["H"] + counts["U"]
     nonCg_unmeth = counts["x"] + counts["h"] + counts["u"]
-    perc_nonCg_meth = round(nonCg_meth / (nonCg_meth + nonCg_unmeth) * 100, 3)
+    try:
+        perc_nonCg_meth = round(nonCg_meth / (nonCg_meth + nonCg_unmeth) * 100, 3)
+    except ZeroDivisionError: 
+        perc_nonCg_meth = 0
     lambda_unmeth = lambda_counts["z"] + lambda_counts["x"] + lambda_counts["h"] + lambda_counts["u"]
     lambda_meth = lambda_counts["Z"] + lambda_counts["X"] + lambda_counts["H"] + lambda_counts["U"]
-    perc_lambda_meth = round(lambda_meth / (lambda_meth + lambda_unmeth) * 100, 3)
+    try:
+        perc_lambda_meth = round(lambda_meth / (lambda_meth + lambda_unmeth) * 100, 3)
+    except ZeroDivisionError: 
+        perc_lambda_meth = 0
     lambda_cg_meth = lambda_counts["Z"]
     lambda_cg_unmeth = lambda_counts["z"]
     try: 
