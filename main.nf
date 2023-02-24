@@ -34,7 +34,6 @@ include { FASTQC as POSTTRIM_FASTQC } from './modules/fastqc/main' addParams(pub
 include { BISMARK_ALIGN } from './modules/bismark/bismark_align/main' addParams(db: params.db)
 include { BISMARK_EXTRACT } from './modules/bismark/bismark_extract/main'
 include { CONV_STATS_CREATE } from './modules/conversion_stats/create_stats/main'
-include { CONV_STATS_MERGE } from './modules/conversion_stats/merge_stats/main'
 include { MULTIQC } from './modules/multiqc/main'
 include { bs_efficiency } from './modules/bs_efficiency.nf'
 include { allele_freq } from './modules/allele_freq.nf'
@@ -67,9 +66,6 @@ workflow {
 
     //Run bisulfite_conversion on bismark_align output
     CONV_STATS_CREATE(BISMARK_ALIGN.out.bam.collect(flat: false).flatMap())
-
-    //Create a compiled table of all the conversion stats
-    CONV_STATS_MERGE(CONV_STATS_CREATE.out.report.collect())
 
     //Run multiqc on pretrim fastqc output, trim_galore trimming report, posttrim fastqc output, bismark conversion output
     MULTIQC(PRETRIM_FASTQC.out.collect().combine(POSTTRIM_FASTQC.out.collect()).combine(TRIM_GALORE.out.report.collect()).combine(BISMARK_ALIGN.out.report.collect()).combine(CONV_STATS_CREATE.out.report.collect()))
