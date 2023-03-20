@@ -43,6 +43,6 @@ process BISMARK_EXTRACT {
 
     script:
     """
-    bismark_methylation_extractor --parallel ${task.cpus} --paired-end --include_overlap --bedGraph ${bam}
+    bismark_methylation_extractor --parallel ${task.cpus} --paired-end --include_overlap --gzip --bedGraph ${bam}
     """
 }

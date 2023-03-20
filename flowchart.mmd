@@ -1,0 +1,73 @@
+flowchart TD
+    p0((Channel.fromFilePairs))
+    p1([ifEmpty])
+    p2[PRETRIM_FASTQC]
+    p3[TRIM_GALORE]
+    p4[POSTTRIM_FASTQC]
+    p5([collect])
+    p6([collect])
+    p7([flatMap])
+    p8[BISMARK_ALIGN]
+    p9([collect])
+    p10([flatMap])
+    p11[BISMARK_EXTRACT]
+    p12(( ))
+    p13(( ))
+    p14(( ))
+    p15(( ))
+    p16(( ))
+    p17(( ))
+    p18(( ))
+    p19([collect])
+    p20([flatMap])
+    p21[CONV_STATS_CREATE]
+    p22(( ))
+    p23([collect])
+    p24([collect])
+    p25([combine])
+    p26([collect])
+    p27([combine])
+    p28([collect])
+    p29([combine])
+    p30([collect])
+    p31([combine])
+    p32[MULTIQC]
+    p33(( ))
+    p0 --> p1
+    p1 -->|reads_ch| p2
+    p2 --> p23
+    p1 -->|reads_ch| p3
+    p3 --> p4
+    p3 --> p26
+    p4 --> p5
+    p5 -->|state| p8
+    p3 --> p6
+    p6 --> p7
+    p7 --> p8
+    p8 --> p9
+    p8 --> p28
+    p9 --> p10
+    p10 --> p11
+    p11 --> p18
+    p11 --> p17
+    p11 --> p16
+    p11 --> p15
+    p11 --> p14
+    p11 --> p13
+    p11 --> p12
+    p8 --> p19
+    p19 --> p20
+    p20 --> p21
+    p21 --> p22
+    p21 --> p30
+    p23 --> p25
+    p4 --> p24
+    p24 --> p25
+    p25 --> p27
+    p26 --> p27
+    p27 --> p29
+    p28 --> p29
+    p29 --> p31
+    p30 --> p31
+    p31 --> p32
+    p32 --> p33
