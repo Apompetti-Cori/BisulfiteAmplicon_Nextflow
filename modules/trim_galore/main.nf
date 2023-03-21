@@ -51,6 +51,6 @@ process TRIM_GALORE {
     --quality 28 \
     --phred33 \
     --cores ${task.cpus} \
-    $reads
+    ${reads}
     """
 }

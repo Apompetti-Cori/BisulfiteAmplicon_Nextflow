@@ -18,8 +18,9 @@ nextflow.enable.dsl=2
 
 //Configurable variables for pipeline
 params.fastq_folder = "${workflow.projectDir}/fastq"
-params.reads = "${params.fastq_folder}/*{_R,_}{1,2}*.{fastq,fq}.gz"
+params.reads = "${params.fastq_folder}/*{_L00}{1,2,3,4}{_R,_}{1,2}*.{fastq,fq}.gz"
 params.singleEnd = false
+params.multiLane = false
 params.rrbs = false
 params.amplifytargets = false
 params.genome = false
@@ -42,12 +43,33 @@ include { calc_summary } from './modules/calc_summary.nf'
 
 //Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 Channel
-.fromFilePairs(params.reads, size: params.singleEnd ? 1 : 2)
+.fromFilePairs(params.reads, size: params.singleEnd ? (params.multiLane ?: 1) : 2)
 .ifEmpty {exit 1, "Cannot find any reads matching ${params.reads}\nNB: Path needs to be enclosed in quotes!\nIf this is single-end data, please specify --singleEnd on the command line."}
 .set{ reads_ch }
 
+process LANE_COMBINE {
+    input:
+    tuple val(file_id), path(reads)
+
+    output:
+    tuple val(file_id), path("*_mL.fq.gz")
+
+    script:
+    """
+    cat ${reads} > ${file_id}_mL.fq.gz
+    """
+}
+
+
 workflow {
-    
+    reads_ch.view()
+    if(params.multiLane){
+        LANE_COMBINE(reads_ch)
+        reads_ch = LANE_COMBINE.out
+        reads_ch.view()
+    }
+
+    /*
     //Run fastqc on raw reads
     PRETRIM_FASTQC(reads_ch)
     //Run trim_galore on raw reads
@@ -80,5 +102,6 @@ workflow {
         //Run calc_summary on allele_freq and bs_efficiency output
         calc_summary(bs_efficiency.out.combine(allele_freq.out, by: 0).combine(Channel.fromPath( "${params.ref_dist}" )))
     }
+    */
 }
 
