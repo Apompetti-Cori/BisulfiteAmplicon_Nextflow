@@ -31,11 +31,11 @@ process BISMARK_ALIGN {
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 
     input:
-    tuple val(file_id), path(reads)
+    tuple val(meta), path(reads)
     val(state)
 
     output:
-    tuple val(file_id), path("*.bam"), emit: bam
+    tuple val(meta), path("*.bam"), emit: bam
     path("*report.txt"), emit: report
 
     script:

@@ -31,10 +31,10 @@ process CONV_STATS_CREATE {
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 
     input:
-    tuple val(file_id), path(bam)
+    tuple val(meta), path(bam)
 
     output:
-    tuple val(file_id), path("*.tsv"), optional: true
+    tuple val(meta), path("*.tsv"), optional: true
     path("*.tsv"), emit: report, optional: true
 
     shell:
@@ -53,7 +53,7 @@ process CONV_STATS_CREATE {
     else:
         raise ValueError("Alignment file must end in .sam or .bam")
 
-    sample_id = re.sub('_val.*', '', str("!{file_id}"))
+    sample_id = re.sub('_val.*', '', str("!{meta.id}"))
     
     outfile = str(sample_id) + str(".conversion-stats.tsv")
 

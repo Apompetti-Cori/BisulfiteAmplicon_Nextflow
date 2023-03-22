@@ -33,14 +33,14 @@ process TRIM_GALORE {
     publishDir "${params.outdir}/trim_galore", mode: 'copy'
 
     input:
-    tuple val(file_id), path(reads)
+    tuple val(meta), path(reads)
 
     output:
-    tuple val(file_id), path("*.fq.gz"), emit: reads
+    tuple val(meta), path("*.fq.gz"), emit: reads
     path("*trimming_report.txt"), emit: report
 
     script:
-    def singleEnd = params.singleEnd ? '' : '--paired'
+    def singleEnd = meta.single_end ? '' : '--paired'
     def rrbs = params.rrbs ? '--rrbs' : ''
 
     """

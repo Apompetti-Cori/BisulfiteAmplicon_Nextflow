@@ -33,7 +33,7 @@ process FASTQC {
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 
     input:
-    tuple val(file_id), path(reads)
+    tuple val(meta), path(reads)
 
     output:
     path("*.{html,zip}")

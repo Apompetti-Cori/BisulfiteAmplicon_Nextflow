@@ -30,16 +30,16 @@ process BISMARK_EXTRACT {
     publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
 
     input:
-    tuple val(file_id), path(bam)
+    tuple val(meta), path(bam)
 
     output:
-    tuple val(file_id), path("*.bismark.cov.gz"), optional: true
-    tuple val(file_id), path("CpG_OT_${file_id}*"), emit: cpg_ot, optional: true
-    tuple val(file_id), path("CpG_OB_${file_id}*"), emit: cpg_ob, optional: true
-    tuple val(file_id), path("CHG_OT_${file_id}*"), emit: chg_ot, optional: true
-    tuple val(file_id), path("CHG_OB_${file_id}*"), emit: chg_ob, optional: true
-    tuple val(file_id), path("CHH_OT_${file_id}*"), emit: chh_ot, optional: true
-    tuple val(file_id), path("CHH_OB_${file_id}*"), emit: chh_ob, optional: true
+    tuple val(meta), path("*.bismark.cov.gz"), optional: true
+    tuple val(meta), path("CpG_OT_${meta.id}*"), emit: cpg_ot, optional: true
+    tuple val(meta), path("CpG_OB_${meta.id}*"), emit: cpg_ob, optional: true
+    tuple val(meta), path("CHG_OT_${meta.id}*"), emit: chg_ot, optional: true
+    tuple val(meta), path("CHG_OB_${meta.id}*"), emit: chg_ob, optional: true
+    tuple val(meta), path("CHH_OT_${meta.id}*"), emit: chh_ot, optional: true
+    tuple val(meta), path("CHH_OB_${meta.id}*"), emit: chh_ob, optional: true
 
     script:
     """
