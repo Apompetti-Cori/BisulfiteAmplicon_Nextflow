@@ -39,7 +39,15 @@ process BISMARK_ALIGN {
     path("*report.txt"), emit: report
 
     script:
-    """
-    bismark --bowtie2 --parallel ${task.cpus} ${params.db} -1 ${reads[0]} -2 ${reads[1]}
-    """
+    if(meta.single_end){
+        """
+        bismark --bowtie2 --parallel ${task.cpus} ${params.db} ${reads}
+        """
+    }
+    else{
+        """
+        bismark --bowtie2 --parallel ${task.cpus} ${params.db} -1 ${reads[0]} -2 ${reads[1]}
+        """
+    }
+
 }

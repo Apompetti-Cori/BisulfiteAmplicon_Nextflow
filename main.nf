@@ -40,9 +40,8 @@ include { bs_efficiency } from './modules/bs_efficiency.nf'
 include { allele_freq } from './modules/allele_freq.nf'
 include { calc_summary } from './modules/calc_summary.nf'
 
-//Provide sample table in csv format to have pipeline process through 
+//Provide sample table in csv format to have pipeline process samples via sample table
 params.sample_table = false
-//Create channel for reads. By default, auto-detects paired end data. Specify --singleEnd if your fastq files are in single-end format
 if ( params.sample_table ){
     // Channel for the samplesheet
     ch_samplesheet = Channel.fromPath(params.sample_table)
