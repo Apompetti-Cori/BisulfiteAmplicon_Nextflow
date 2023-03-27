@@ -42,7 +42,15 @@ process BISMARK_EXTRACT {
     tuple val(meta), path("CHH_OB_${meta.id}*"), emit: chh_ob, optional: true
 
     script:
-    """
-    bismark_methylation_extractor --parallel ${task.cpus} --paired-end --include_overlap --gzip --bedGraph ${bam}
-    """
+    if( meta.single_end ){
+        """
+        bismark_methylation_extractor --parallel ${task.cpus} --gzip --bedGraph ${bam}
+        """
+    }
+    else{
+        """
+        bismark_methylation_extractor --parallel ${task.cpus} --paired-end --include_overlap --gzip --bedGraph ${bam}
+        """
+    }
+
 }

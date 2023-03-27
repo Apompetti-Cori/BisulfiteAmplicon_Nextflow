@@ -85,7 +85,7 @@ process CONV_STATS_CREATE {
                 counts["U"] += c.get("U", 0)
             else: #Mapped single end reads
                 c = Counter(aln_str)
-                if ref == lambda_rname:
+                if ref == "!{params.lambda_rname}":
                     lambda_counts["z"] += c.get("z", 0)
                     lambda_counts["Z"] += c.get("Z", 0)
                     lambda_counts["x"] += c.get("x", 0)
