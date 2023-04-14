@@ -18,7 +18,7 @@ nextflow.enable.dsl=2
 
 //Configurable variables for pipeline
 params.fastq_folder = "${workflow.projectDir}/fastq"
-params.reads = "${params.fastq_folder}/*{_L00}{1,2,3,4}{_R,_}{1,2}*.{fastq,fq}.gz"
+params.reads = "${params.fastq_folder}/*{_L00,}{1,2,3,4}{_R,_}{1,2}*.{fastq,fq}.gz"
 params.singleEnd = false
 params.multiLane = false
 params.rrbs = false
@@ -105,7 +105,7 @@ else {
 }
 
 
-process LANE_COMBINE {
+process PREPROCESS {
     input:
     tuple val(meta), path(reads_1), path(reads_2)
 
@@ -129,13 +129,13 @@ process LANE_COMBINE {
     else {
         if (meta.single_end){
             """
-            cat ${reads_1} > ${meta.id}_sL.fq.gz
+            mv ${reads_1} ${meta.id}_sL.fq.gz
             """
         }
         else {
             """
-            cat ${reads_1} > ${meta.id}_sL_1.fq.gz
-            cat ${reads_2} > ${meta.id}_sL_2.fq.gz
+            mv ${reads_1} ${meta.id}_sL_1.fq.gz
+            mv ${reads_2} ${meta.id}_sL_2.fq.gz
             """
         }
     }
@@ -143,11 +143,9 @@ process LANE_COMBINE {
 
 
 workflow {
-    LANE_COMBINE(reads_ch)
-    reads_ch = LANE_COMBINE.out
+    PREPROCESS(reads_ch)
+    reads_ch = PREPROCESS.out
     reads_ch.view()
-
-    
     //Run fastqc on raw reads
     PRETRIM_FASTQC(reads_ch)
     //Run trim_galore on raw reads
