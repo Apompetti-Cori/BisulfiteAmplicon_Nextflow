@@ -57,8 +57,8 @@ process CONV_STATS_CREATE {
     
     outfile = str(sample_id) + str(".conversion-stats.tsv")
 
-    counts = {"z":0, "Z":0, "x":0, "X":0, "H":0, "h":0, "H":0, "u":0, "U":0}
-    lambda_counts =  {"z":0, "Z":0, "x":0, "X":0, "H":0, "h":0, "H":0, "u":0, "U":0}
+    counts = {"z":0, "Z":0, "x":0, "X":0, "h":0, "H":0, "u":0, "U":0}
+    lambda_counts =  {"z":0, "Z":0, "x":0, "X":0, "h":0, "H":0, "u":0, "U":0}
 
     for read in bamfile:
         ref = read.reference_name
