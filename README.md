@@ -10,6 +10,7 @@
 You will now have a folder in your directory called `Bisulfite_Nextflow`.
 
 ## Step 2: Create csv file explaining the samples
+- Use `sample_table_template.csv` as a guide for your sample table.
 - First column should be sample containing sample ID's
 - Consequent columns should be r1_L1, r1_L2, r1_L3, r1_L4, r2_L1, r2_L2, r2_L3, r2_L4
   - Example: a single end fastq should have a sample ID and a file name inhabiting the r1_L1 column
