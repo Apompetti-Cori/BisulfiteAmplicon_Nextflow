@@ -1,4 +1,4 @@
-# ![coriell_img](https://raw.githubusercontent.com/Apompetti-Cori/Bisulfite_Nextflow/main/multiqc_logo/Coriell_Logo.png | width=100) Bisulfite Nextflow Pipeline
+# <img src="https://raw.githubusercontent.com/Apompetti-Cori/Bisulfite_Nextflow/main/multiqc_logo/Coriell_Logo.png" width="100"> Bisulfite Nextflow Pipeline
 
 ## Step 1: Create csv file explaining the samples
 - First column should be sample containing sample ID's
