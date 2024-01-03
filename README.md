@@ -1,4 +1,4 @@
-# <img src="https://raw.githubusercontent.com/Apompetti-Cori/Bisulfite_Nextflow/main/multiqc_logo/Coriell_Logo.png" width="100"> 
+# <img src="https://raw.githubusercontent.com/Apompetti-Cori/Bisulfite_Nextflow/main/multiqc_logo/Coriell_Logo.png" width="500"> 
 
 # Bisulfite Nextflow Pipeline
 
