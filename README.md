@@ -38,6 +38,7 @@ I usually always include the -resume flag when starting a pipeline run since it 
 
 ## Dependencies:
 
-## Tasklist:
+```[tasklist]
 - [ ] List dependencies
 - [ ] Create Singularity/Docker Container file for the pipeline
+```
