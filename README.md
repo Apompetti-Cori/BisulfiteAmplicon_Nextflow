@@ -14,3 +14,7 @@ The csv file will be passed into the pipeline using the `--sample_table` flag. M
 ## Step 2: Choose genome that the samples will be aligned to
 - This step requires you to have already downloaded your reference geneome and prepared it using `bismark_genome_preparation`
 - Once prepared, you can provide the folder of the genome to the `--db` flag. Make sure to pass in the absolute path of the genome folder.
+
+
+## Additional flags
+`--rrbs`: passes flags to certain tools when the data is Reduced Represetation Bisulfite Sequencing (RRBS).
