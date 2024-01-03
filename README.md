@@ -1,4 +1,4 @@
-# <a href="https://www.coriell.org">
+<a href="https://www.coriell.org">
     <img src="https://raw.githubusercontent.com/Apompetti-Cori/Bisulfite_Nextflow/main/multiqc_logo/Coriell_Logo.png" alt="Coriell Logo" width="500">
 </a>
 
