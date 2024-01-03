@@ -36,8 +36,8 @@ I usually always include the -resume flag when starting a pipeline run since it 
 `--rrbs`: Passes flags to certain tools when the data is Reduced Represetation Bisulfite Sequencing (RRBS).
 `--multiqc_report_title`: Title your multiqc report to be a bit more descriptive. Make sure not to include spaces in the title. 
 
-Dependencies:
+## Dependencies:
 
-Tasklist:
+## Tasklist:
 - [ ] List dependencies
 - [ ] Create Singularity/Docker Container file for the pipeline
