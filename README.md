@@ -28,7 +28,9 @@ The csv file will be passed into the pipeline using the `--sample_table` flag. M
 ## Step 4: Run pipeline
 Once you have your sample table and genome added to your directory, you can run the pipline using Nextflow.
 
-Example run: `nextflow run main.nf -with-report -with-trace -with-dag flowchart.mmd --db path_to_genome --multiqc_report_title Multiqc_Report_Title --sample_table path_to_sample_table`
+Example run: `nextflow run main.nf -resume -with-report -with-trace -with-dag flowchart.mmd --db path_to_genome --multiqc_report_title Multiqc_Report_Title --sample_table path_to_sample_table`
+
+I usually always include the -resume flag when starting a pipeline run since it will just say nothing to be resumed if a cache is not found.
 
 ## Additional flags
 `--rrbs`: Passes flags to certain tools when the data is Reduced Represetation Bisulfite Sequencing (RRBS).
