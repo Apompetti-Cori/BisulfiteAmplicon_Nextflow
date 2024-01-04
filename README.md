@@ -22,7 +22,7 @@ You will now have a folder in your directory called `Bisulfite_Nextflow`.
 The csv file will be passed into the pipeline using the `--sample_table` flag. Make sure to pass in the absolute path of the sample table.
 
 ## Step 3: Choose genome that the samples will be aligned to
-- This step requires you to have already downloaded your reference geneome and prepared it using `bismark_genome_preparation`
+- This step requires you to have already downloaded your reference genome and prepared it using `bismark_genome_preparation`
 - Once prepared, you can provide the folder of the genome to the `--db` flag. Make sure to pass in the absolute path of the genome folder.
 
 ## Step 4: Run pipeline
