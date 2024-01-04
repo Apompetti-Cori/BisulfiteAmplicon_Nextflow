@@ -33,7 +33,7 @@ Example run: `nextflow run ./Bisulfite_Nexflow/main.nf -resume -with-report -wit
 I usually always include the -resume flag when starting a pipeline run since it will just say nothing to be resumed if a cache is not found.
 
 ## Additional flags
-`--rrbs`: Passes flags to certain tools when the data is Reduced Represetation Bisulfite Sequencing (RRBS).
+`--rrbs`: Passes flags to certain tools when the data is Reduced Represetation Bisulfite Sequencing (RRBS).\
 `--multiqc_report_title`: Title your multiqc report to be a bit more descriptive. Make sure not to include spaces in the title. 
 
 ## Dependencies:
