@@ -20,7 +20,7 @@ nextflow.enable.dsl=2
 Define local params 
 */
 params.outdir = "./results"
-params.pubdir = "conv_stats/single"
+params.pubdir = "conv_stats/"
 params.lambda_rname = "J02459.1_lambda"
 
 process CONV_STATS_CREATE {
