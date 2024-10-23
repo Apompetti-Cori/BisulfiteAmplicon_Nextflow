@@ -21,11 +21,15 @@ You will now have a folder in your directory called `Bisulfite_Nextflow`.
    
 The csv file will be passed into the pipeline using the `--sample_table` flag. Make sure to pass in the absolute path of the sample table.
 
-## Step 3: Choose genome that the samples will be aligned to
+## Step: Build Singularity image file
+- Run `sh ./Bisulfite_Nextflow/scripts/singularity_defs/build_sif.sh`
+- This will allow for the Nextflow pipeline to run within the singularity image, controlling for dependencies
+
+## Step: Choose genome that the samples will be aligned to
 - This step requires you to have already downloaded your reference genome and prepared it using `bismark_genome_preparation`
 - Once prepared, you can provide the folder of the genome to the `--db` flag. Make sure to pass in the absolute path of the genome folder.
 
-## Step 4: Run pipeline
+## Step: Run pipeline
 Once you have your sample table and genome added to your directory, you can run the pipline using Nextflow.
 
 Example run: `nextflow run ./Bisulfite_Nexflow/main.nf -resume -with-report -with-trace -with-dag flowchart.mmd --db path_to_genome --multiqc_report_title Multiqc_Report_Title --sample_table path_to_sample_table`
