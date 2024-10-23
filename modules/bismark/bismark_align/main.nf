@@ -41,6 +41,7 @@ process BISMARK_ALIGN {
     input:
     tuple val(meta), path(reads)
     val(state)
+    path(index)
 
     output:
     tuple val(meta), path("*.bam"), emit: bam
@@ -49,12 +50,12 @@ process BISMARK_ALIGN {
     script:
     if(meta.single_end){
         """
-        bismark --bowtie2 --parallel ${task.cpus} ${params.db} ${reads}
+        bismark --bowtie2 --parallel ${task.cpus} ${index} ${reads}
         """
     }
     else{
         """
-        bismark --bowtie2 --parallel ${task.cpus} ${params.db} -1 ${reads[0]} -2 ${reads[1]}
+        bismark --bowtie2 --parallel ${task.cpus} ${index} -1 ${reads[0]} -2 ${reads[1]}
         """
     }
 

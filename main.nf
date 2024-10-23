@@ -83,7 +83,7 @@ workflow {
     state = POSTTRIM_FASTQC.out.collect()
 
     //Run bismark_align on trimmed reads
-    BISMARK_ALIGN(TRIM_GALORE.out.reads.collect(flat: false).flatMap(), state)
+    BISMARK_ALIGN(TRIM_GALORE.out.reads.collect(flat: false).flatMap(), state, index_ch)
 
     //Run bismark_extract on bismark_align output
     BISMARK_EXTRACT(BISMARK_ALIGN.out.bam.collect(flat: false).flatMap())
