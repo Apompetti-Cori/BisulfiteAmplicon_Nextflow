@@ -28,7 +28,8 @@ process CONV_STATS_CREATE {
     memory '8 GB'
     cpus 1
 
-    publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
+    // Check batch and save output accordingly
+    publishDir "${params.outdir}",  saveAs: { meta.batch == '' ? "${params.pubdir}/${it}" : "${meta.batch}/${params.pubdir}/${it}" }, mode: 'link'
 
     input:
     tuple val(meta), path(bam)
@@ -132,7 +133,7 @@ process CONV_STATS_CREATE {
             "Lambda_Methylated_CpG", "Lambda_Unmethylated_CpG", "Lambda_Percent_Methylated_CpG", 
             "Lambda_Methylated_nonCpG", "Lambda_Unmethylated_nonCpG", "Lambda_Percent_Methylated_nonCpG",
             "z", "Z", "x", "X", "H", "h", "H", "u", "U", 
-            "z_lambda", "Z_lambda", "x_lambda", "X_lambda", "H_lambda", "h_lambda", "H_lambda", "u_lambda", "U_lambda"]
+            "z_lambda", "Z_lambda", "x_lambda", "X_lambda", "h_lambda", "H_lambda", "u_lambda", "U_lambda"]
     
     header = "\t".join(cols) + "\n"
     data = [str(sample_id), meth, unmeth, perc_meth,

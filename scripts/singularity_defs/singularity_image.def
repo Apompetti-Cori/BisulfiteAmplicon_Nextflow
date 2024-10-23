@@ -1,0 +1,37 @@
+Bootstrap: docker
+From: continuumio/miniconda3
+
+%post
+
+    apt-get update
+    apt-get -y upgrade
+    apt-get -y install unzip make build-essential zlib1g-dev libbz2-dev liblzma-dev bowtie2
+    apt -y install default-jre
+    pip install cutadapt pysam
+    pip install git+https://github.com/ewels/MultiQC.git
+
+    cd /usr/local/bin
+    wget "https://www.bioinformatics.babraham.ac.uk/projects/fastqc/fastqc_v0.11.8.zip" -O fastqc_v0.11.8.zip
+    unzip fastqc_v0.11.8.zip
+    find /usr/local/bin/FastQC -name "fastqc" -maxdepth 1 -exec chmod +x {} \;
+    find /usr/local/bin/FastQC -name "fastqc" -maxdepth 1 -perm /u+x -exec ln -s {} /usr/local/bin \;
+
+    cd /usr/local/bin
+    wget -qO- https://github.com/FelixKrueger/TrimGalore/archive/0.6.10.tar.gz | tar -xz
+    find /usr/local/bin/ -name "trim_galore" -exec ln -s {} /usr/local/bin \;
+
+    cd /usr/local/bin
+    wget -qO- "https://github.com/jgm/pandoc/releases/download/2.3/pandoc-2.3-linux.tar.gz" | tar xz
+    find /usr/local/bin/pandoc-2.3 -name "pandoc" -exec ln -s {} /usr/local/bin \;
+
+    cd /usr/local/bin
+    wget -qO- https://github.com/samtools/samtools/releases/download/1.10/samtools-1.10.tar.bz2 | tar -xj
+    cd samtools-1.10/
+    ./configure --without-curses; make; make install;
+
+    cd /usr/local/bin
+    wget https://github.com/FelixKrueger/Bismark/archive/master.zip -O master.zip
+    unzip master.zip
+    find /usr/local/bin/Bismark-master/ -maxdepth 1 -name "bismark" -exec ln -s {} /usr/local/bin \;
+    find /usr/local/bin/Bismark-master/ -maxdepth 1 -name "bismark_methylation_extractor" -exec ln -s {} /usr/local/bin \;
+    

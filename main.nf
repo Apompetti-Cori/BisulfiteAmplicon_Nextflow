@@ -1,31 +1,44 @@
 #!/usr/bin/env nextflow
 
 /*
+================================================================================
 Coriell Institute for Medical Research
-Bisulfite Amplicon Pipeline. Started January 2023.
 
 Contributors:
 Anthony Pompetti <apompetti@coriell.org>
-
-Methodology adapted from:
-prior snakemake pipeline developed by Matthew Walt
+================================================================================
 */
 
 /*
+================================================================================
 Enable Nextflow DSL2
+================================================================================
 */
 nextflow.enable.dsl=2
 
-//Configurable variables for pipeline
+/*
+================================================================================
+Configurable variables for pipeline
+================================================================================
+*/
 params.rrbs = false
 params.input_type = "fastq"
 params.genome = false
+params.sample_table = false //Provide sample table in csv format to have pipeline process samples via sample table
 params.db = params.genomes ? params.genomes[ params.genome ].db ?:false : false
 
-//Include functions to main pipeline
+/*
+================================================================================
+Include functions to main pipeline
+================================================================================
+*/
 include { createInputChannel } from './modules/preprocess/functions.nf'
 
-//Include modules to main pipeline
+/*
+================================================================================
+Include modules to main pipeline
+================================================================================
+*/
 include { PREPROCESS_READS as PREPROCESS } from './modules/preprocess/main.nf'
 include { FASTQC as PRETRIM_FASTQC } from './modules/fastqc/main.nf' addParams(pubdir: 'pretrim_fastqc')
 include { TRIM_GALORE } from './modules/trim_galore/main.nf'
@@ -35,25 +48,40 @@ include { BISMARK_EXTRACT } from './modules/bismark/bismark_extract/main.nf'
 include { CONV_STATS_CREATE } from './modules/conversion_stats/main.nf'
 include { MULTIQC } from './modules/multiqc/main.nf'
 
-//Provide sample table in csv format to have pipeline process samples via sample table
-params.sample_table = false
+/*
+================================================================================
+Channel creation
+================================================================================
+*/
+index_ch = Channel.fromPath(
+  params.db, type: 'dir'
+)
 
+/*
+================================================================================
+Workflow declaration
+================================================================================
+*/
 workflow {
     input_ch = createInputChannel(params.sample_table, params.input_type)
     PREPROCESS(reads_ch)
     reads_ch = PREPROCESS.out
 
+    index_ch.view()
+
     //Run fastqc on raw reads
     PRETRIM_FASTQC(reads_ch)
+    
     //Run trim_galore on raw reads
     TRIM_GALORE(reads_ch)
 
     //Run fastqc on trimmed reads, specifies trim_galore[0] because second input channel is not need for this process
     POSTTRIM_FASTQC(TRIM_GALORE.out.reads)
-    //Run bismark_align on trimmed reads
-    //State Dependency: Wait until TRIM_GALORE is done to run bismark align
+
     //State Dependency: Wait until POSTTRIM_FASTQC is done to run bismark align
     state = POSTTRIM_FASTQC.out.collect()
+
+    //Run bismark_align on trimmed reads
     BISMARK_ALIGN(TRIM_GALORE.out.reads.collect(flat: false).flatMap(), state)
 
     //Run bismark_extract on bismark_align output

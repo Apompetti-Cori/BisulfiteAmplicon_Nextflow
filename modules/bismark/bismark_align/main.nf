@@ -1,34 +1,42 @@
 #!/usr/bin/env nextflow
 
 /*
+================================================================================
 Coriell Institute for Medical Research
-Bisulfite Amplicon Pipeline. Started January 2023.
 
 Contributors:
 Anthony Pompetti <apompetti@coriell.org>
-
-Methodology adapted from:
-prior snakemake pipeline developed by Matthew Walt
+================================================================================
 */
 
 /*
+================================================================================
 Enable Nextflow DSL2
+================================================================================
 */
 nextflow.enable.dsl=2
 
 /*
-Define local params 
+================================================================================
+Configurable variables for module
+================================================================================
 */
 params.outdir = "./results"
 params.pubdir = "bismark_align"
 params.db = false
 
+/*
+================================================================================
+Module declaration
+================================================================================
+*/
 process BISMARK_ALIGN {
     maxForks 4
     memory '40 GB'
     cpus 4
     
-    publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
+    // Check batch and save output accordingly
+    publishDir "${params.outdir}",  saveAs: { meta.batch == '' ? "${params.pubdir}/${it}" : "${meta.batch}/${params.pubdir}/${it}" }, mode: 'link'
 
     input:
     tuple val(meta), path(reads)

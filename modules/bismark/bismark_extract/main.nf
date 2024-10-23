@@ -27,7 +27,8 @@ process BISMARK_EXTRACT {
     memory '16 GB'
     cpus 4
 
-    publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
+    // Check batch and save output accordingly
+    publishDir "${params.outdir}",  saveAs: { meta.batch == '' ? "${params.pubdir}/${it}" : "${meta.batch}/${params.pubdir}/${it}" }, mode: 'link'
 
     input:
     tuple val(meta), path(bam)

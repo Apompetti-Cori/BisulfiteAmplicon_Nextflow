@@ -29,8 +29,9 @@ process MULTIQC {
     cpus 1
 
     conda '/opt/miniconda3/envs/multiqc'
-
-    publishDir "${params.outdir}/${params.pubdir}", mode: 'copy'
+    
+    // Check batch and save output accordingly
+    publishDir "${params.outdir}",  saveAs: { meta.batch == '' ? "${params.pubdir}/${it}" : "${meta.batch}/${params.pubdir}/${it}" }, mode: 'link'
     
     input:
     path('multiqc_input/*')
