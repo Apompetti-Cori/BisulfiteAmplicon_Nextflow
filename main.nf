@@ -25,6 +25,7 @@ params.rrbs = false
 params.input_type = "fastq"
 params.genome = false
 params.sample_table = false //Provide sample table in csv format to have pipeline process samples via sample table
+params.multiqc_report_title = "Nextflow_MQC"
 params.db = params.genomes ? params.genomes[ params.genome ].db ?:false : false
 
 /*
