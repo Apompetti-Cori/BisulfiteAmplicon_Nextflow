@@ -5,7 +5,7 @@
 # Bisulfite Nextflow Pipeline
 
 ## Step 1: Clone pipeline into your project directory that contains the fastq files.
-`git clone https://github.com/Apompetti-Cori/Bisulfite_Nextflow.git .`
+`git clone https://github.com/Apompetti-Cori/Bisulfite_Nextflow.git`
 
 You will now have a folder in your directory called `Bisulfite_Nextflow`.
 
